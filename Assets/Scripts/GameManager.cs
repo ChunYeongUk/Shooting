@@ -165,7 +165,6 @@ public class GameManager : MonoBehaviour
         {
             stageLevel++;
         }
-        Debug.Log("1");
         StartCoroutine(MainTextCoroutine);
     }
 
@@ -175,7 +174,6 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator MainText()
     {
-        Debug.Log("2");
         mainTextString.Clear();
         mainTextString.Append("STAGE ");
         mainTextString.Append(stageLevel);
