@@ -7,6 +7,9 @@ using TMPro;
 using System.Text;
 using System.IO;
 
+/// <summary>
+/// 스폰 정보를 저장하는 구조체
+/// </summary>
 public struct SpawnInfo
 {
     public int spawnType { get; private set; }
@@ -23,6 +26,9 @@ public struct SpawnInfo
     }
 }
 
+/// <summary>
+/// Battle씬의 이벤트를 관리하는 클래스
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     [SerializeField] TMP_Text mainText;
@@ -64,10 +70,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] Sprite[] itemSprites;
     [SerializeField] Sprite[] effectSprites;
 
+    IEnumerator MainTextCoroutine;
+    IEnumerator StageProgressCoroutine;
     WaitForSeconds waitForEffect = new WaitForSeconds(0.05f);
     WaitForSeconds waitForStage = new WaitForSeconds(0.016f);
 
     void Awake()
+    {
+        Init();
+        StartCoroutine(MainTextCoroutine);
+    }
+
+    /// <summary>
+    /// 전역변수를 초기화하는 함수
+    /// </summary>
+    void Init()
     {
         objectManager = GetComponent<ObjectManager>();
         objectManager.Init();
@@ -79,12 +96,17 @@ public class GameManager : MonoBehaviour
         ratioX = joystickTran.localPosition.x / screenHalfSize.x;
         ratioY = joystickTran.localPosition.y / screenHalfSize.y;
 
-        StartCoroutine(MainText(true));
+        MainTextCoroutine = MainText();
+        StageProgressCoroutine = StageProgress();
     }
 
     #region StageManagement
+    /// <summary>
+    /// 스테이지를 준비하는 함수
+    /// </summary>
     void StageStart()
     {
+        StopCoroutine(MainTextCoroutine);
         spawnInfoList.Clear();
         spawnIndex = 0;
         isStageEnd = false;
@@ -106,9 +128,13 @@ public class GameManager : MonoBehaviour
         curSpawnDelay = 0;
         nextSpawnDelay = spawnInfoList[0].spawnDelay;
 
-        StartCoroutine(StageProgress());
+        StartCoroutine(StageProgressCoroutine);
     }
 
+    /// <summary>
+    /// 스테이지 정보에 맞추어 적 생성을 요청하는 함수
+    /// </summary>
+    /// <returns></returns>
     IEnumerator StageProgress()
     {
         while (!isStageEnd)
@@ -124,6 +150,9 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// 스테이지 클리어시 호출되는 함수
+    /// </summary>
     public void StageEnd()
     {
         isStageEnd = true;
@@ -136,12 +165,17 @@ public class GameManager : MonoBehaviour
         {
             stageLevel++;
         }
-
-        StartCoroutine(MainText(false));
+        Debug.Log("1");
+        StartCoroutine(MainTextCoroutine);
     }
 
-    IEnumerator MainText(bool p_IsStart)
+    /// <summary>
+    /// 스테이지 시작전 Text를 켰다가 끄는 함수
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator MainText()
     {
+        Debug.Log("2");
         mainTextString.Clear();
         mainTextString.Append("STAGE ");
         mainTextString.Append(stageLevel);
@@ -167,6 +201,9 @@ public class GameManager : MonoBehaviour
         StageStart();
     }
 
+    /// <summary>
+    /// 적을 오브젝트풀에서 꺼내오는 함수
+    /// </summary>
     void SpawnEnemy()
     {
         ObjectType newObjectType = GetEnemy(spawnInfoList[spawnIndex].spawnType);
@@ -186,6 +223,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Object
+    /// <summary>
+    /// 오브젝트 풀에서 플레이어를 꺼내온 후 오브젝트 세팅하는 함수
+    /// </summary>
+    /// <param name="p_SubType"></param>
+    /// <returns></returns>
     ObjectType GetPlayer(int p_SubType)
     {
         ObjectType newObjectType = objectManager.GetObjectType((int)ObjectTypeEnum.Player);
@@ -215,6 +257,11 @@ public class GameManager : MonoBehaviour
         return newObjectType;
     }
 
+    /// <summary>
+    /// 오브젝트 풀에서 적을 꺼내온 후 오브젝트 세팅하는 함수
+    /// </summary>
+    /// <param name="p_SubType"></param>
+    /// <returns></returns>
     ObjectType GetEnemy(int p_SubType)
     {
         ObjectType newObjectType = objectManager.GetObjectType((int)ObjectTypeEnum.Enemy);
@@ -256,6 +303,13 @@ public class GameManager : MonoBehaviour
         return newObjectType;
     }
 
+    /// <summary>
+    /// 오브젝트 풀에서 총알을 꺼내온 후 오브젝트 세팅하는 함수
+    /// </summary>
+    /// <param name="p_SubType"></param>
+    /// <param name="p_Position"></param>
+    /// <param name="p_Rotation"></param>
+    /// <param name="p_Force"></param>
     public void GetBullet(int p_SubType, Vector3 p_Position, Quaternion p_Rotation, Vector2 p_Force)
     {
         ObjectType newObjectType = objectManager.GetObjectType((int)ObjectTypeEnum.Bullet);
@@ -293,6 +347,10 @@ public class GameManager : MonoBehaviour
         newRigidbody.AddForce(p_Force, ForceMode2D.Impulse);
     }
 
+    /// <summary>
+    /// 오브젝트 풀에서 아이템을 꺼내온 후 오브젝트 세팅하는 함수
+    /// </summary>
+    /// <param name="p_Position"></param>
     public void GetItem(Vector3 p_Position)
     {
         ObjectType newObjectType = objectManager.GetObjectType((int)ObjectTypeEnum.Item);
@@ -330,6 +388,11 @@ public class GameManager : MonoBehaviour
         newRigidbody.AddForce(Vector2.down, ForceMode2D.Impulse);
     }
 
+    /// <summary>
+    /// 오브젝트 풀에서 이펙트를 꺼내온 후 오브젝트 세팅하는 함수
+    /// </summary>
+    /// <param name="p_SubType"></param>
+    /// <param name="p_Position"></param>
     public void GetEffect(int p_SubType, Vector3 p_Position)
     {
         ObjectType newObjectType = objectManager.GetObjectType((int)ObjectTypeEnum.Effect);
@@ -345,6 +408,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(Effect(newObjectType));
     }
 
+    /// <summary>
+    /// 꺼내온 이펙트를 실행한 후 오브젝트 풀로 반환하는 함수
+    /// </summary>
+    /// <param name="p_ObjectType"></param>
+    /// <returns></returns>
     IEnumerator Effect(ObjectType p_ObjectType)
     {
         SpriteRenderer spriteRenderer = p_ObjectType.GetComponent<SpriteRenderer>();
@@ -360,6 +428,12 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region PrivateFunction
+    /// <summary>
+    /// HP, MP변동시 UI에 반영하는 함수
+    /// </summary>
+    /// <param name="p_IsHp"></param>
+    /// <param name="p_IsPlus"></param>
+    /// <param name="p_Count"></param>
     public void HpMpUpdate(bool p_IsHp, bool p_IsPlus, int p_Count)
     {
         if(p_IsHp)
@@ -372,6 +446,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 터치값을 받아와서 계산 후 UI에 반영하는 함수
+    /// 터치 시작시 호출
+    /// </summary>
+    /// <param name="p_Position"></param>
     public void JoystickMove(Vector2 p_Position)
     {
         Vector2 joystickPos = p_Position - screenHalfSize;
@@ -382,22 +461,38 @@ public class GameManager : MonoBehaviour
         joystickTran.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// 터치값을 받아와서 계산 후 UI에 반영하는 함수
+    /// 터치 해제시 호출
+    /// </summary>
+    /// <param name="p_Position"></param>
     public void JoystickMove()
     {
         joystickTran.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 오브젝트풀에 반환하는 함수
+    /// </summary>
+    /// <param name="p_ObjectType"></param>
     public void SetObject(ObjectType p_ObjectType)
     {
         objectManager.SetObjectType(p_ObjectType);
     }
 
+    /// <summary>
+    /// 점수 추가시 값을 저장 후 UI에 반영하는 함수
+    /// </summary>
+    /// <param name="p_Score"></param>
     public void GetScore(int p_Score)
     {
         gameScore += p_Score;
         scoreText.text = string.Format("{0:n0}", gameScore);
     }
 
+    /// <summary>
+    /// GameOver시 UI에 반영하는 함수
+    /// </summary>
     public void GameOver()
     {
         Time.timeScale = 0;
@@ -410,6 +505,9 @@ public class GameManager : MonoBehaviour
         gameOverObj.SetActive(true);
     }
 
+    /// <summary>
+    /// 종료 버튼 클릭시 로비씬으로 이동하는 함수
+    /// </summary>
     public void SceneMove()
     {
         Time.timeScale = 1;

@@ -1,51 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro;
 
-public class TitleSceneManager : MonoBehaviour, IPointerDownHandler
+/// <summary>
+/// Title씬의 이벤트를 관리하는 클래스
+/// </summary>
+public class TitleSceneManager : MonoBehaviour
 {
-    int twinkleCount;
-    [SerializeField] private TMP_Text text;
-    WaitForSeconds waitForTwinkle = new WaitForSeconds(0.1f);
+    [SerializeField] Slider loadingbar;
+
+    IEnumerator sceneLoadCoroutine;
+    WaitForSeconds waitForSceneLoad;
 
     void Awake()
     {
+        Init();
+        StartCoroutine(sceneLoadCoroutine);
+    }
+
+    /// <summary>
+    /// 전역변수를 초기화하는 함수
+    /// </summary>
+    void Init()
+    {
         Application.targetFrameRate = 60;
-        StartCoroutine(TextTwinkle());
+        sceneLoadCoroutine = SceneLoad();
+        waitForSceneLoad = new WaitForSeconds(0.01f);
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    /// <summary>
+    /// 로비씬으로 이동하는 함수
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator SceneLoad()
     {
-        SceneManager.LoadScene(1);
-    }
-
-    IEnumerator TextTwinkle()
-    {
-        Color twinkleColor = Color.black;
-
-        while (true)
+        int loadingCount = 0;
+        while(!loadingCount.Equals(50))
         {
-            yield return waitForTwinkle;
-
-            if (twinkleCount < 5)
-            {
-                twinkleColor.a -= 0.1f * twinkleCount;
-                text.color = twinkleColor;
-            }
-            else
-            {
-                twinkleColor.a = 0.1f * twinkleCount;
-                text.color = twinkleColor;
-                if(twinkleCount.Equals(10))
-                {
-                    twinkleCount = -1;
-                }
-            }
-
-            twinkleCount++;
+            yield return waitForSceneLoad;
+            loadingCount++;
+            loadingbar.value = loadingCount * 0.02f;
         }
+
+        SceneManager.LoadSceneAsync(1);
     }
 }

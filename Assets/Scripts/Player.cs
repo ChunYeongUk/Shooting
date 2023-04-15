@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 플레이어의 이동, 공격, 피격에 대한 클래스
+/// </summary>
 public class Player : MonoBehaviour
 {
     int maxHp = 3;
@@ -29,6 +32,10 @@ public class Player : MonoBehaviour
 
     WaitForSeconds waitForRespawn = new WaitForSeconds(2.0f);
 
+    /// <summary>
+    /// 전역변수를 초기화하는 함수
+    /// </summary>
+    /// <param name="p_GameManager"></param>
     public void Init(GameManager p_GameManager)
     {
         gameManager = p_GameManager;
@@ -44,26 +51,12 @@ public class Player : MonoBehaviour
     }
 
     #region Move
+    /// <summary>
+    /// 터치 값을 받아서 저장하는 함수
+    /// </summary>
     void TouchCheck()
     {
-#if UNITY_EDITOR
-        if (Input.GetMouseButtonDown(0))
-        {
-            touchPos = Input.mousePosition;
-            gameManager.JoystickMove(touchPos);
-        }
-
-        if (Input.GetMouseButton(0))
-        {
-            moveDir = (Vector2)Input.mousePosition - touchPos;
-            Move();
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            gameManager.JoystickMove();
-        }
-#elif UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -89,9 +82,31 @@ public class Player : MonoBehaviour
                     break;
             }
         }
+#else
+        if (Input.GetMouseButtonDown(0))
+        {
+            touchPos = Input.mousePosition;
+            gameManager.JoystickMove(touchPos);
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            moveDir = (Vector2)Input.mousePosition - touchPos;
+            Move();
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            gameManager.JoystickMove();
+        }
 #endif
     }
 
+    /// <summary>
+    /// 터치값에 속도를 더하고, 
+    /// 범위를 확인 한 후,
+    /// 캐릭터를 이동시키는 함수 
+    /// </summary>
     void Move()
     {
         if (!isHit)
@@ -122,25 +137,24 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Attack
+    /// <summary>
+    /// 일정 시간마다 공격을 하는 함수
+    /// </summary>
     void Attack()
     {
         curAttackDelay += Time.deltaTime;
 
         if(curAttackDelay > maxAttackDelay && !isHit && !isRepawn)
         {
-            switch(thisType.subType)
-            {
-                case 0:
-                    StraightShot(curPower);
-                    break;
-                case 1:
-                    ArchShot(curPower);
-                    break;
-            }
+            StraightShot(curPower);
             curAttackDelay = 0;
         }
     }
 
+    /// <summary>
+    /// 직선으로 공격하는 함수
+    /// </summary>
+    /// <param name="p_AmmoNum">curPower</param>
     void StraightShot(int p_AmmoNum)
     {
         float distance = 0;
@@ -160,19 +174,13 @@ public class Player : MonoBehaviour
             gameManager.GetBullet(0, posVec, Quaternion.identity, Vector2.up * 10);
         }
     }
-
-    void ArchShot(int p_AmmoNum)
-    {
-        for (int i = 0; i < p_AmmoNum; i++)
-        {
-            Vector2 dirVec = new Vector2(Mathf.Cos(Mathf.PI * 10 * i * 0.01f), -1);
-
-            gameManager.GetBullet(0, transform.position, Quaternion.identity, dirVec.normalized * 5);
-        }
-    }
     #endregion
 
     #region Hit
+    /// <summary>
+    /// 충돌을 감지하는 함수
+    /// </summary>
+    /// <param name="collision"></param>
     void OnTriggerEnter2D(Collider2D collision)
     {
         ObjectType newObjectType = collision.GetComponent<ObjectType>();
@@ -205,6 +213,9 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 피격 이벤트 함수
+    /// </summary>
     void OnHit()
     {
         gameManager.GetEffect(0, curPos);
@@ -223,6 +234,10 @@ public class Player : MonoBehaviour
         StartCoroutine(Respawn());
     }
 
+    /// <summary>
+    /// 피격 당한 후 부활하는 함수
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Respawn()
     {
         yield return waitForRespawn;
@@ -238,6 +253,10 @@ public class Player : MonoBehaviour
         isRepawn = false;
     }
 
+    /// <summary>
+    /// 아이템 획득 함수
+    /// </summary>
+    /// <param name="p_ItemType"></param>
     void GetItem(int p_ItemType)
     {
         switch (p_ItemType)
