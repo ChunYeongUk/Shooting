@@ -23,7 +23,7 @@ SpriteAtlas:
     platformSettings:
     - serializedVersion: 3
       m_BuildTarget: DefaultTexturePlatform
-      m_MaxTextureSize: 2048
+      m_MaxTextureSize: 128
       m_ResizeAlgorithm: 0
       m_TextureFormat: -1
       m_TextureCompression: 0
@@ -44,20 +44,17 @@ SpriteAtlas:
     secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
-    - {fileID: 2800000, guid: 8bce235a955068440be9e13133caef18, type: 3}
-    - {fileID: 2800000, guid: f9c4072cb79f02f45b93055bb2be91c0, type: 3}
     - {fileID: 2800000, guid: 0e8eba97859cf2f4bbc5286866398483, type: 3}
+    - {fileID: 2800000, guid: f9c4072cb79f02f45b93055bb2be91c0, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 0e8eba97859cf2f4bbc5286866398483, type: 3}
-  - {fileID: 21300000, guid: 8bce235a955068440be9e13133caef18, type: 3}
   - {fileID: 21300000, guid: f9c4072cb79f02f45b93055bb2be91c0, type: 3}
   m_PackedSpriteNamesToIndex:
   - Loadingbar_Fill
-  - TitleSceneBackground
   - Loadingbar_Back
   m_RenderDataMap: {}
   m_Tag: TitleSceneAtlas

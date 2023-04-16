@@ -47,9 +47,9 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 213f6adcfc7a30f4cb6e2491d0b1ec70, type: 3}
     - {fileID: 2800000, guid: 8b406665b48c8f94a9961ba68cdc7195, type: 3}
     - {fileID: 2800000, guid: c08bc1591399b964888c49f714f711a1, type: 3}
-    - {fileID: 2800000, guid: 064b7a54a5fa6b64f9e6bf39f9937786, type: 3}
-    - {fileID: 2800000, guid: fd30bea2a24e5a84d96706bd4d4d4078, type: 3}
-    - {fileID: 2800000, guid: e874117a090536641a55ee814018e64d, type: 3}
+    - {fileID: 2800000, guid: 24c7766acc9ef654390976f2f71098bc, type: 3}
+    - {fileID: 2800000, guid: 836334468087bcb498079fa8a1744200, type: 3}
+    - {fileID: 2800000, guid: 59012a9515688b641b726eea01ddb192, type: 3}
     - {fileID: 2800000, guid: 2935ba072b5a56547933ce2e0581ce6b, type: 3}
     - {fileID: 2800000, guid: 175e67ac3dc60734aae282d4f404a04b, type: 3}
     - {fileID: 2800000, guid: 979da72283dad8e408f1ff66e7b9bc8c, type: 3}
@@ -62,18 +62,13 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 32032ab70a778dc4493a766ba2faa060, type: 3}
     - {fileID: 2800000, guid: 4ceab3ade234e8543aac743e4cd2b9bd, type: 3}
     - {fileID: 2800000, guid: 6520dda4a70dfbf40a55b7af39ecda4e, type: 3}
-    - {fileID: 2800000, guid: 836334468087bcb498079fa8a1744200, type: 3}
-    - {fileID: 2800000, guid: 24c7766acc9ef654390976f2f71098bc, type: 3}
-    - {fileID: 2800000, guid: 59012a9515688b641b726eea01ddb192, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 979da72283dad8e408f1ff66e7b9bc8c, type: 3}
-  - {fileID: 21300000, guid: fd30bea2a24e5a84d96706bd4d4d4078, type: 3}
   - {fileID: 21300000, guid: de5598a3d91013846b197b4a852dd70c, type: 3}
-  - {fileID: 21300000, guid: 064b7a54a5fa6b64f9e6bf39f9937786, type: 3}
   - {fileID: 21300000, guid: 6520dda4a70dfbf40a55b7af39ecda4e, type: 3}
   - {fileID: 21300000, guid: f0b519c478c51844f963c98f8d026a7d, type: 3}
   - {fileID: 21300000, guid: 8b406665b48c8f94a9961ba68cdc7195, type: 3}
@@ -84,7 +79,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 32032ab70a778dc4493a766ba2faa060, type: 3}
   - {fileID: 21300000, guid: c08bc1591399b964888c49f714f711a1, type: 3}
   - {fileID: 21300000, guid: 24c7766acc9ef654390976f2f71098bc, type: 3}
-  - {fileID: 21300000, guid: e874117a090536641a55ee814018e64d, type: 3}
   - {fileID: 21300000, guid: a377709ad23b3a243a5630e148ff19b9, type: 3}
   - {fileID: 21300000, guid: 175e67ac3dc60734aae282d4f404a04b, type: 3}
   - {fileID: 21300000, guid: 213f6adcfc7a30f4cb6e2491d0b1ec70, type: 3}
@@ -93,9 +87,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1429cedeb0041e3418b56763a011dbb1, type: 3}
   m_PackedSpriteNamesToIndex:
   - Effect1_3
-  - Enemy2
   - Effect1_7
-  - Enemy1
   - HP
   - Effect1_4
   - Bullet1
@@ -106,7 +98,6 @@ SpriteAtlas:
   - Item_MP
   - Bullet2
   - MP
-  - Player1
   - Item_HP
   - Effect1_2
   - BattleBackground

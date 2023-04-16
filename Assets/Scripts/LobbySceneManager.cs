@@ -12,8 +12,14 @@ public class LobbySceneManager : MonoBehaviour
     [SerializeField] Button startBtn;
     [SerializeField] Button settingBtn;
     [SerializeField] Button quitBtn;
+    [SerializeField] Button nextBtn;
+    [SerializeField] Button prevBtn;
 
     [SerializeField] GameObject settingObject;
+
+    [SerializeField] RawImage characterImage;
+    [SerializeField] Texture[] characters;
+    int characterNum;
 
     private void Awake()
     {
@@ -25,6 +31,11 @@ public class LobbySceneManager : MonoBehaviour
         startBtn.onClick.AddListener(StartBtnEvent);
         settingBtn.onClick.AddListener(SettingBtnEvent);
         quitBtn.onClick.AddListener(QuitBtnEvent);
+        nextBtn.onClick.AddListener(NextBtnEvent);
+        prevBtn.onClick.AddListener(PrevBtnEvent);
+
+        characterNum = PlayerPrefs.GetInt("lastCharacter", 0);
+        characterImage.texture = characters[characterNum];
     }
 
     /// <summary>
@@ -32,6 +43,7 @@ public class LobbySceneManager : MonoBehaviour
     /// </summary>
     void StartBtnEvent()
     {
+        PlayerPrefs.SetInt("lastCharacter", characterNum);
         SceneManager.LoadScene(2);
     }
 
@@ -53,5 +65,31 @@ public class LobbySceneManager : MonoBehaviour
 #else
             Application.Quit(); // 어플리케이션 종료
 #endif
+    }
+
+    /// <summary>
+    /// 다음 버튼 클릭 이벤트
+    /// </summary>
+    void NextBtnEvent()
+    {
+        characterNum++;
+        if(characterNum.Equals(characters.Length))
+        {
+            characterNum = 0;
+        }
+        characterImage.texture = characters[characterNum];
+    }
+
+    /// <summary>
+    /// 이전 버튼 클릭 이벤트
+    /// </summary>
+    void PrevBtnEvent()
+    {
+        characterNum--;
+        if (characterNum.Equals(-1))
+        {
+            characterNum = characters.Length - 1;
+        }
+        characterImage.texture = characters[characterNum];
     }
 }

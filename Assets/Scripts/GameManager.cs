@@ -53,7 +53,6 @@ public class GameManager : MonoBehaviour
     List<SpawnInfo> spawnInfoList = new List<SpawnInfo>();
 
     int stageLevel = 1;
-    static int playerType = 0;
 
     float nextSpawnDelay = 100;
     float curSpawnDelay = 0;
@@ -64,8 +63,7 @@ public class GameManager : MonoBehaviour
     ObjectManager objectManager;
     Player player;
 
-    [SerializeField] Sprite[] playerSprites;
-    [SerializeField] Sprite[] enemySprites;
+    [SerializeField] Sprite[] characterSprites;
     [SerializeField] Sprite[] bulletSprites;
     [SerializeField] Sprite[] itemSprites;
     [SerializeField] Sprite[] effectSprites;
@@ -88,7 +86,7 @@ public class GameManager : MonoBehaviour
     {
         objectManager = GetComponent<ObjectManager>();
         objectManager.Init();
-        player = GetPlayer(playerType).GetComponent<Player>();
+        player = GetPlayer(PlayerPrefs.GetInt("lastCharacter", 0)).GetComponent<Player>();
 
         screenHalfSize.x = Screen.width * 0.5f;
         screenHalfSize.y = Screen.height * 0.5f;
@@ -233,17 +231,16 @@ public class GameManager : MonoBehaviour
         newObjectType.subType = p_SubType;
 
         SpriteRenderer newSprite = newObjectType.GetComponent<SpriteRenderer>();
-        if (p_SubType > playerSprites.Length)
+        if (p_SubType > characterSprites.Length)
         {
-            newSprite.sprite = playerSprites[playerSprites.Length - 1];
+            newSprite.sprite = characterSprites[characterSprites.Length - 1];
         }
         else
         {
-            newSprite.sprite = playerSprites[p_SubType];
+            newSprite.sprite = characterSprites[p_SubType];
         }
 
-        BoxCollider2D newCollider = newObjectType.gameObject.AddComponent<BoxCollider2D>();
-        newCollider.size = new Vector2(0.5f, 1);
+        newObjectType.gameObject.AddComponent<PolygonCollider2D>();
 
         Rigidbody2D newRigid = newObjectType.gameObject.AddComponent<Rigidbody2D>();
         newRigid.bodyType = RigidbodyType2D.Kinematic;
@@ -268,9 +265,13 @@ public class GameManager : MonoBehaviour
 
         if (!newObjectType.mainType.Equals((int)ObjectTypeEnum.Enemy))
         {
-            CircleCollider2D newCollider = newObjectType.gameObject.AddComponent<CircleCollider2D>();
+            newObjectType.transform.Rotate(new Vector3(180, 0, 0));
+
+            SpriteRenderer newSprite = newObjectType.GetComponent<SpriteRenderer>();
+            newSprite.sprite = characterSprites[Random.Range(0, characterSprites.Length)];
+
+            PolygonCollider2D newCollider = newObjectType.gameObject.AddComponent<PolygonCollider2D>();
             newCollider.isTrigger = true;
-            newCollider.radius = 0.16f;
 
             Rigidbody2D newRigid = newObjectType.gameObject.AddComponent<Rigidbody2D>();
             newRigid.gravityScale = 0;
@@ -286,17 +287,6 @@ public class GameManager : MonoBehaviour
             Enemy newEnemy = newObjectType.GetComponent<Enemy>();
             newEnemy.ReInit();
         }
-
-        SpriteRenderer newSprite = newObjectType.GetComponent<SpriteRenderer>();
-        if (p_SubType > playerSprites.Length)
-        {
-            newSprite.sprite = enemySprites[enemySprites.Length - 1];
-        }
-        else
-        {
-            newSprite.sprite = enemySprites[p_SubType];
-        }
-        newSprite.flipY = true;
 
         return newObjectType;
     }
@@ -330,7 +320,7 @@ public class GameManager : MonoBehaviour
         }
 
         SpriteRenderer newSprite = newObjectType.GetComponent<SpriteRenderer>();
-        if (p_SubType > playerSprites.Length)
+        if (p_SubType > bulletSprites.Length)
         {
             newSprite.sprite = bulletSprites[bulletSprites.Length - 1];
         }
@@ -373,7 +363,7 @@ public class GameManager : MonoBehaviour
         }
 
         SpriteRenderer newSprite = newObjectType.GetComponent<SpriteRenderer>();
-        if (subType > playerSprites.Length)
+        if (subType > itemSprites.Length)
         {
             newSprite.sprite = itemSprites[itemSprites.Length - 1];
         }
