@@ -27,8 +27,6 @@ public class Enemy : MonoBehaviour
 
     bool isHit;
 
-    IEnumerator bossMoveCoroutine;
-    IEnumerator attackCoroutine;
     WaitForSeconds waitForBossMove;
     WaitForSeconds waitForAttack;
 
@@ -45,8 +43,6 @@ public class Enemy : MonoBehaviour
         thisRigidbody = GetComponent<Rigidbody2D>();
         thisType = GetComponent<ObjectType>();
 
-        bossMoveCoroutine = BossMove();
-        attackCoroutine = Attack();
         waitForBossMove = new WaitForSeconds(2.0f);
         waitForAttack = new WaitForSeconds(0.5f);
     }
@@ -56,6 +52,8 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void ReInit()
     {
+        isHit = true;
+
         switch (thisType.subType)
         {
             case 0:
@@ -63,25 +61,24 @@ public class Enemy : MonoBehaviour
                 thisScore = 10;
                 nextAtkDelay = 5;
                 attackType = Random.Range(0, 2);
-                moveSpeed = -3;
+                moveSpeed = -4;
+                isHit = false;
+                curAtkDelay = 0;
+                StartCoroutine(Attack());
                 break;
             case 1:
                 hitPoint = 10;
                 thisScore = 100;
                 nextAtkDelay = 3;
                 attackType = 0;
-                moveSpeed = -3;
-                StartCoroutine(bossMoveCoroutine);
+                moveSpeed = -2;
+                StartCoroutine(BossMove());
                 break;
             default:
                 break;
         }
 
-        curAtkDelay = 0;
-        isHit = false;
-
         thisRigidbody.velocity = new Vector2(0, moveSpeed);
-        StartCoroutine(attackCoroutine);
     }
     #endregion
 
@@ -94,6 +91,9 @@ public class Enemy : MonoBehaviour
     {
         yield return waitForBossMove;
         thisRigidbody.velocity = Vector2.zero;
+        isHit = false;
+        curAtkDelay = nextAtkDelay;
+        StartCoroutine(Attack());
     }
 
     /// <summary>
@@ -107,7 +107,7 @@ public class Enemy : MonoBehaviour
             yield return waitForAttack;
             curAtkDelay++;
 
-            if (curAtkDelay.Equals(nextAtkDelay))
+            if (curAtkDelay >= nextAtkDelay)
             {
                 if (thisType.subType.Equals(1))
                 {
@@ -221,7 +221,6 @@ public class Enemy : MonoBehaviour
             {
                 gameManager.GetScore(thisScore);
                 gameManager.SetObject(thisType);
-                StopCoroutine(attackCoroutine);
 
                 if (thisType.subType.Equals(0))
                 {

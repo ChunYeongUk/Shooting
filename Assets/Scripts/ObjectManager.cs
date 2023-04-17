@@ -9,12 +9,12 @@ using UnityEngine.Pool;
 /// </summary>
 public class ObjectManager : MonoBehaviour
 {
-    IObjectPool<ObjectType>[] objectPoolArray = new IObjectPool<ObjectType>[(int)ObjectTypeEnum.TypeCount];
+    IObjectPool<ObjectType>[] objectPoolArray;
 
-    int[] defaultCapacity = new int[(int)ObjectTypeEnum.TypeCount] { 1, 20, 100, 20, 20, 4, };
-    int[] maxSize = new int[(int)ObjectTypeEnum.TypeCount] { 1, 100, 500, 100, 100, 4, };
-    string[] objectNames = new string[(int)ObjectTypeEnum.TypeCount];
-    Transform[] objectParents = new Transform[(int)ObjectTypeEnum.TypeCount];
+    int[] defaultCapacity;
+    int[] maxSize;
+    string[] objectNames;
+    Transform[] objectParents;
 
     ObjectType originalType;
 
@@ -23,6 +23,12 @@ public class ObjectManager : MonoBehaviour
     /// </summary>
     public void Init()
     {
+        objectPoolArray = new IObjectPool<ObjectType>[(int)ObjectTypeEnum.TypeCount];
+        defaultCapacity = new int[(int)ObjectTypeEnum.TypeCount] { 1, 20, 100, 20, 20, 4, };
+        maxSize = new int[(int)ObjectTypeEnum.TypeCount] { 1, 100, 500, 100, 100, 4, };
+        objectNames = new string[(int)ObjectTypeEnum.TypeCount];
+        objectParents = new Transform[(int)ObjectTypeEnum.TypeCount];
+
         GameObject newGameObject = new GameObject("TempObj");
 
         for (int i = 0; i < (int)ObjectTypeEnum.TypeCount; i++)

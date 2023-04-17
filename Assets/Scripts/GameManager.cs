@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Text;
@@ -37,46 +36,41 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject[] HpObj;
     [SerializeField] GameObject[] MpObj;
     [SerializeField] GameObject gameOverObj;
-    [SerializeField] Transform joystickTran;
 
     int gameScore;
     int mainTextAlpha;
-    float ratioX;
-    float ratioY;
 
-    Vector2 screenHalfSize;
-
-    StringBuilder mainTextString = new StringBuilder(3);
-    WaitForSeconds waitForMainText = new WaitForSeconds(0.1f);
+    StringBuilder mainTextString;
+    WaitForSeconds waitForMainText;
 
     [SerializeField] TextAsset[] stageArray;
-    List<SpawnInfo> spawnInfoList = new List<SpawnInfo>();
+    List<SpawnInfo> spawnInfoList;
 
-    int stageLevel = 1;
+    int stageLevel;
+    int stageCount;
 
-    float nextSpawnDelay = 100;
-    float curSpawnDelay = 0;
+    float nextSpawnDelay;
+    float curSpawnDelay;
 
-    int spawnIndex = 0;
+    int spawnIndex;
     bool isStageEnd;
 
     ObjectManager objectManager;
     Player player;
+    [SerializeField] Joystick joystick;
 
     [SerializeField] Sprite[] characterSprites;
     [SerializeField] Sprite[] bulletSprites;
     [SerializeField] Sprite[] itemSprites;
     [SerializeField] Sprite[] effectSprites;
 
-    IEnumerator MainTextCoroutine;
-    IEnumerator StageProgressCoroutine;
-    WaitForSeconds waitForEffect = new WaitForSeconds(0.05f);
-    WaitForSeconds waitForStage = new WaitForSeconds(0.016f);
+    WaitForSeconds waitForEffect;
+    WaitForSeconds waitForStage;
 
     void Awake()
     {
         Init();
-        StartCoroutine(MainTextCoroutine);
+        StartCoroutine(MainText());
     }
 
     /// <summary>
@@ -86,16 +80,17 @@ public class GameManager : MonoBehaviour
     {
         objectManager = GetComponent<ObjectManager>();
         objectManager.Init();
+
         player = GetPlayer(PlayerPrefs.GetInt("lastCharacter", 0)).GetComponent<Player>();
+        player.Init(this);
 
-        screenHalfSize.x = Screen.width * 0.5f;
-        screenHalfSize.y = Screen.height * 0.5f;
+        joystick.Init(player);
 
-        ratioX = joystickTran.localPosition.x / screenHalfSize.x;
-        ratioY = joystickTran.localPosition.y / screenHalfSize.y;
-
-        MainTextCoroutine = MainText();
-        StageProgressCoroutine = StageProgress();
+        mainTextString = new StringBuilder(3);
+        waitForMainText = new WaitForSeconds(0.1f);
+        waitForEffect = new WaitForSeconds(0.05f);
+        waitForStage = new WaitForSeconds(0.016f);
+        spawnInfoList = new List<SpawnInfo>();
     }
 
     #region StageManagement
@@ -104,12 +99,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void StageStart()
     {
-        StopCoroutine(MainTextCoroutine);
         spawnInfoList.Clear();
         spawnIndex = 0;
         isStageEnd = false;
 
-        StringReader stringReader = new StringReader(stageArray[stageLevel - 1].text);
+        StringReader stringReader = new StringReader(stageArray[stageLevel].text);
         string stringLine = stringReader.ReadToEnd();
         stringReader.Close();
         stringReader.Dispose();
@@ -126,7 +120,7 @@ public class GameManager : MonoBehaviour
         curSpawnDelay = 0;
         nextSpawnDelay = spawnInfoList[0].spawnDelay;
 
-        StartCoroutine(StageProgressCoroutine);
+        StartCoroutine(StageProgress());
     }
 
     /// <summary>
@@ -155,7 +149,7 @@ public class GameManager : MonoBehaviour
     {
         isStageEnd = true;
 
-        if (stageLevel.Equals(stageArray.Length))
+        if (stageLevel.Equals(stageArray.Length - 1))
         {
             stageLevel = 0;
         }
@@ -163,7 +157,7 @@ public class GameManager : MonoBehaviour
         {
             stageLevel++;
         }
-        StartCoroutine(MainTextCoroutine);
+        StartCoroutine(MainText());
     }
 
     /// <summary>
@@ -172,9 +166,10 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator MainText()
     {
+        stageCount++;
         mainTextString.Clear();
         mainTextString.Append("STAGE ");
-        mainTextString.Append(stageLevel);
+        mainTextString.Append(stageCount);
         mainTextString.Append("\nSTART");
         mainText.text = mainTextString.ToString();
 
@@ -242,12 +237,7 @@ public class GameManager : MonoBehaviour
 
         newObjectType.gameObject.AddComponent<PolygonCollider2D>();
 
-        Rigidbody2D newRigid = newObjectType.gameObject.AddComponent<Rigidbody2D>();
-        newRigid.bodyType = RigidbodyType2D.Kinematic;
-        newRigid.gravityScale = 0;
-
         Player newPlayer = newObjectType.gameObject.AddComponent<Player>();
-        newPlayer.Init(this);
 
         return newObjectType;
     }
@@ -415,7 +405,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region PrivateFunction
+    #region PublicFunction
     /// <summary>
     /// HP, MP변동시 UI에 반영하는 함수
     /// </summary>
@@ -432,31 +422,6 @@ public class GameManager : MonoBehaviour
         {
             MpObj[p_Count].SetActive(p_IsPlus);
         }
-    }
-
-    /// <summary>
-    /// 터치값을 받아와서 계산 후 UI에 반영하는 함수
-    /// 터치 시작시 호출
-    /// </summary>
-    /// <param name="p_Position"></param>
-    public void JoystickMove(Vector2 p_Position)
-    {
-        Vector2 joystickPos = p_Position - screenHalfSize;
-        joystickPos.x *= ratioX;
-        joystickPos.y *= ratioY;
-        joystickTran.localPosition = joystickPos;
-
-        joystickTran.gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// 터치값을 받아와서 계산 후 UI에 반영하는 함수
-    /// 터치 해제시 호출
-    /// </summary>
-    /// <param name="p_Position"></param>
-    public void JoystickMove()
-    {
-        joystickTran.gameObject.SetActive(false);
     }
 
     /// <summary>

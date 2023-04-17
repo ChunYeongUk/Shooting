@@ -7,9 +7,6 @@ using UnityEngine;
 /// </summary>
 public class Background : MonoBehaviour
 {
-    List<Transform> backgroundList;
-
-    IEnumerator scrollCoroutine;
     WaitForSeconds waitForScroll;
 
     int maxPosY;
@@ -18,7 +15,7 @@ public class Background : MonoBehaviour
     void Awake()
     {
         Init();
-        StartCoroutine(scrollCoroutine);
+        StartCoroutine(Scroll());
     }
 
     /// <summary>
@@ -26,16 +23,9 @@ public class Background : MonoBehaviour
     /// </summary>
     void Init()
     {
-        backgroundList = new List<Transform>();
-        scrollCoroutine = Scroll();
         waitForScroll = new WaitForSeconds(0.016f);
-        maxPosY = 16;
+        maxPosY = 8;
         moveSpeed = 0.05f;
-
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            backgroundList.Add(transform.GetChild(i));
-        }
     }
 
     /// <summary>
@@ -48,13 +38,11 @@ public class Background : MonoBehaviour
         {
             yield return waitForScroll;
 
-            for (int i = 0; i < backgroundList.Count; i++)
+            transform.position += Vector3.down * moveSpeed;
+
+            if(transform.position.y < -maxPosY)
             {
-                backgroundList[i].position += Vector3.down * moveSpeed;
-                if (backgroundList[i].position.y < -maxPosY)
-                {
-                    backgroundList[i].position += Vector3.up * maxPosY * 2;
-                }
+                transform.position += Vector3.up * maxPosY * 2;
             }
         }
     }

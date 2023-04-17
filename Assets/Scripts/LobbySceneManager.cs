@@ -26,6 +26,9 @@ public class LobbySceneManager : MonoBehaviour
         Init();
     }
 
+    /// <summary>
+    /// 전역변수를 초기화하는 함수
+    /// </summary>
     void Init()
     {
         startBtn.onClick.AddListener(StartBtnEvent);
@@ -63,7 +66,7 @@ public class LobbySceneManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit(); // 어플리케이션 종료
+        Application.Quit(); // 어플리케이션 종료
 #endif
     }
 

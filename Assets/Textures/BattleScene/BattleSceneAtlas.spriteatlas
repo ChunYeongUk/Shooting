@@ -60,7 +60,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: f87efcfcf34689a4190c255c19d15fc2, type: 3}
     - {fileID: 2800000, guid: a377709ad23b3a243a5630e148ff19b9, type: 3}
     - {fileID: 2800000, guid: 32032ab70a778dc4493a766ba2faa060, type: 3}
-    - {fileID: 2800000, guid: 4ceab3ade234e8543aac743e4cd2b9bd, type: 3}
+    - {fileID: 2800000, guid: 2738177ebb4b0c44d8677d0c39a1e005, type: 3}
     - {fileID: 2800000, guid: 6520dda4a70dfbf40a55b7af39ecda4e, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
@@ -83,7 +83,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 175e67ac3dc60734aae282d4f404a04b, type: 3}
   - {fileID: 21300000, guid: 213f6adcfc7a30f4cb6e2491d0b1ec70, type: 3}
   - {fileID: 21300000, guid: f87efcfcf34689a4190c255c19d15fc2, type: 3}
-  - {fileID: 21300000, guid: 4ceab3ade234e8543aac743e4cd2b9bd, type: 3}
+  - {fileID: 21300000, guid: 2738177ebb4b0c44d8677d0c39a1e005, type: 3}
   - {fileID: 21300000, guid: 1429cedeb0041e3418b56763a011dbb1, type: 3}
   m_PackedSpriteNamesToIndex:
   - Effect1_3

@@ -11,13 +11,12 @@ public class TitleSceneManager : MonoBehaviour
 {
     [SerializeField] Slider loadingbar;
 
-    IEnumerator sceneLoadCoroutine;
     WaitForSeconds waitForSceneLoad;
 
     void Awake()
     {
         Init();
-        StartCoroutine(sceneLoadCoroutine);
+        StartCoroutine(SceneLoad());
     }
 
     /// <summary>
@@ -26,7 +25,7 @@ public class TitleSceneManager : MonoBehaviour
     void Init()
     {
         Application.targetFrameRate = 60;
-        sceneLoadCoroutine = SceneLoad();
+
         waitForSceneLoad = new WaitForSeconds(0.01f);
     }
 

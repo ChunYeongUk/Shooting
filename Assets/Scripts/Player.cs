@@ -7,30 +7,30 @@ using UnityEngine;
 /// </summary>
 public class Player : MonoBehaviour
 {
-    int maxHp = 3;
-    int curHp = 3;
-    int maxMp = 3;
-    int curMp = 3;
-    int maxPower = 10;
-    int curPower = 1;
+    int maxHp;
+    int curHp;
+    int maxMp;
+    int curMp;
+    int maxPower;
+    int curPower;
 
-    float moveSpeed = 5;
-    float maxAttackDelay = 0.5f;
-    float curAttackDelay = 0;
+    float moveSpeed;
 
     bool isHit;
     bool isRepawn;
 
-    Vector2 touchPos;
+    Vector2 curPos;
     Vector2 moveDir;
-    Vector2 curPos = new Vector2(0, -6f);
 
-    ObjectType thisType;
+    IEnumerator moveCoroutine;
+
     SpriteRenderer thisRenderer;
 
     GameManager gameManager;
 
-    WaitForSeconds waitForRespawn = new WaitForSeconds(2.0f);
+    WaitForSeconds waitForFrame;
+    WaitForSeconds waitForRespawn;
+    WaitForSeconds waitForAttack;
 
     /// <summary>
     /// 전역변수를 초기화하는 함수
@@ -39,100 +39,88 @@ public class Player : MonoBehaviour
     public void Init(GameManager p_GameManager)
     {
         gameManager = p_GameManager;
-        thisType = GetComponent<ObjectType>();
         thisRenderer = GetComponent<SpriteRenderer>();
+        curPos = new Vector2(0, -6f);
         transform.position = curPos;
-    }
 
-    void Update()
-    {
-        TouchCheck();
-        Attack();
+        maxHp = 3;
+        curHp = maxHp;
+        maxMp = 3;
+        curMp = maxMp;
+        maxPower = 10;
+        curPower = 1;
+        moveSpeed = 5;
+
+        waitForFrame = new WaitForSeconds(0.016f);
+        waitForRespawn = new WaitForSeconds(2.0f);
+        waitForAttack = new WaitForSeconds(0.1f);
+
+        StartCoroutine(Attack());
     }
 
     #region Move
-    /// <summary>
-    /// 터치 값을 받아서 저장하는 함수
-    /// </summary>
-    void TouchCheck()
-    {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            switch(touch.phase)
-            {
-                case TouchPhase.Began:
-                    touchPos = touch.position;
-                    gameManager.JoystickMove(touchPos);
-                    break;
-                case TouchPhase.Moved:
-                    moveDir = touch.position - touchPos;
-                    Move();
-                    break;
-                case TouchPhase.Stationary:
-                    Move();
-                    break;
-                case TouchPhase.Ended:
-                    gameManager.JoystickMove();
-                    break;
-                case TouchPhase.Canceled:
-                    gameManager.JoystickMove();
-                    break;
-            }
-        }
-#else
-        if (Input.GetMouseButtonDown(0))
-        {
-            touchPos = Input.mousePosition;
-            gameManager.JoystickMove(touchPos);
-        }
-
-        if (Input.GetMouseButton(0))
-        {
-            moveDir = (Vector2)Input.mousePosition - touchPos;
-            Move();
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            gameManager.JoystickMove();
-        }
-#endif
-    }
-
     /// <summary>
     /// 터치값에 속도를 더하고, 
     /// 범위를 확인 한 후,
     /// 캐릭터를 이동시키는 함수 
     /// </summary>
-    void Move()
+    IEnumerator Move()
     {
-        if (!isHit)
+        while(true)
         {
-            curPos += moveDir.normalized * moveSpeed * Time.deltaTime;
+            yield return waitForFrame;
 
-            if (curPos.x < -4f)
+            if (!isHit)
             {
-                curPos.x = -4f;
-            }
-            else if (curPos.x > 4f)
-            {
-                curPos.x = 4f;
-            }
+                curPos += moveDir.normalized * moveSpeed * Time.deltaTime;
 
-            if (curPos.y < -7.5f)
-            {
-                curPos.y = -7.5f;
-            }
-            else if (curPos.y > 7.5f)
-            {
-                curPos.y = 7.5f;
-            }
+                if (curPos.x < -4f)
+                {
+                    curPos.x = -4f;
+                }
+                else if (curPos.x > 4f)
+                {
+                    curPos.x = 4f;
+                }
 
-            transform.position = curPos;
+                if (curPos.y < -7.5f)
+                {
+                    curPos.y = -7.5f;
+                }
+                else if (curPos.y > 7.5f)
+                {
+                    curPos.y = 7.5f;
+                }
+
+                transform.position = curPos;
+            }
         }
+    }
+
+    /// <summary>
+    /// 이동 방향을 받아오는 함수
+    /// </summary>
+    /// <param name="p_MoveDir"></param>
+    public void ChangeMoveDir(Vector2 p_MoveDir)
+    {
+        moveDir = p_MoveDir;
+    }
+
+    /// <summary>
+    /// 터치시 이동을 시작하는 함수
+    /// </summary>
+    public void TouchStart()
+    {
+        moveCoroutine = Move();
+        StartCoroutine(moveCoroutine);
+    }
+
+    /// <summary>
+    /// 터치 해제시 이동을 멈추는 함수
+    /// </summary>
+    public void TouchEnd()
+    {
+        StopCoroutine(moveCoroutine);
     }
     #endregion
 
@@ -140,14 +128,15 @@ public class Player : MonoBehaviour
     /// <summary>
     /// 일정 시간마다 공격을 하는 함수
     /// </summary>
-    void Attack()
+    IEnumerator Attack()
     {
-        curAttackDelay += Time.deltaTime;
-
-        if(curAttackDelay > maxAttackDelay && !isHit && !isRepawn)
+        while(true)
         {
-            StraightShot(curPower);
-            curAttackDelay = 0;
+            yield return waitForAttack;
+            if(!isHit && !isRepawn)
+            {
+                StraightShot(curPower);
+            }
         }
     }
 
