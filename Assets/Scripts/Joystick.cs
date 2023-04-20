@@ -12,6 +12,10 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     Vector2 firstPos;
 
+    bool isDoubleTab;
+
+    WaitForSeconds waitForDoubleTab = new WaitForSeconds(0.2f);
+
     /// <summary>
     /// 전역변수를 초기화하는 함수
     /// </summary>
@@ -68,7 +72,27 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
                 player.ChangeMoveDir(Vector2.zero);
                 joystickTran.gameObject.SetActive(false);
                 pointerList.Clear();
+                if(!isDoubleTab)
+                {
+                    StartCoroutine(DoubleTabCheck());
+                }
+                else
+                {
+                    isDoubleTab = false;
+                    player.SkillAttack();
+                }
             }
         }
+    }
+
+    /// <summary>
+    /// 더블 클릭 여부를 확인하는 함수
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator DoubleTabCheck()
+    {
+        isDoubleTab = true;
+        yield return waitForDoubleTab;
+        isDoubleTab = false;
     }
 }

@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BattleSceneAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 87eb433f228a47b489b147714b217958, type: 3}
+    - {fileID: 2800000, guid: c08bc1591399b964888c49f714f711a1, type: 3}
+    - {fileID: 2800000, guid: 8b406665b48c8f94a9961ba68cdc7195, type: 3}
+    - {fileID: 2800000, guid: 2935ba072b5a56547933ce2e0581ce6b, type: 3}
+    - {fileID: 2800000, guid: 175e67ac3dc60734aae282d4f404a04b, type: 3}
+    - {fileID: 2800000, guid: 979da72283dad8e408f1ff66e7b9bc8c, type: 3}
+    - {fileID: 2800000, guid: f0b519c478c51844f963c98f8d026a7d, type: 3}
+    - {fileID: 2800000, guid: 1429cedeb0041e3418b56763a011dbb1, type: 3}
+    - {fileID: 2800000, guid: 374419464f1e805469c15a429dd36f35, type: 3}
+    - {fileID: 2800000, guid: de5598a3d91013846b197b4a852dd70c, type: 3}
+    - {fileID: 2800000, guid: f87efcfcf34689a4190c255c19d15fc2, type: 3}
+    - {fileID: 2800000, guid: a377709ad23b3a243a5630e148ff19b9, type: 3}
+    - {fileID: 2800000, guid: 32032ab70a778dc4493a766ba2faa060, type: 3}
+    - {fileID: 2800000, guid: 70752c2c69eb7ec4f9efef78bf6e7f24, type: 3}
+    - {fileID: 2800000, guid: 2738177ebb4b0c44d8677d0c39a1e005, type: 3}
+    - {fileID: 2800000, guid: 1f55f977247830643b41609dfc8e8aaa, type: 3}
+    - {fileID: 2800000, guid: 6520dda4a70dfbf40a55b7af39ecda4e, type: 3}
+    - {fileID: 2800000, guid: 836334468087bcb498079fa8a1744200, type: 3}
+    - {fileID: 2800000, guid: 24c7766acc9ef654390976f2f71098bc, type: 3}
+    - {fileID: 2800000, guid: 2d7aa661788dbbc45bc8e1b1cd88747a, type: 3}
+    - {fileID: 2800000, guid: 59012a9515688b641b726eea01ddb192, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 2d7aa661788dbbc45bc8e1b1cd88747a, type: 3}
+  - {fileID: 21300000, guid: 979da72283dad8e408f1ff66e7b9bc8c, type: 3}
+  - {fileID: 21300000, guid: de5598a3d91013846b197b4a852dd70c, type: 3}
+  - {fileID: 21300000, guid: 6520dda4a70dfbf40a55b7af39ecda4e, type: 3}
+  - {fileID: 21300000, guid: f0b519c478c51844f963c98f8d026a7d, type: 3}
+  - {fileID: 21300000, guid: 8b406665b48c8f94a9961ba68cdc7195, type: 3}
+  - {fileID: 21300000, guid: 59012a9515688b641b726eea01ddb192, type: 3}
+  - {fileID: 21300000, guid: 836334468087bcb498079fa8a1744200, type: 3}
+  - {fileID: 21300000, guid: 374419464f1e805469c15a429dd36f35, type: 3}
+  - {fileID: 21300000, guid: 2935ba072b5a56547933ce2e0581ce6b, type: 3}
+  - {fileID: 21300000, guid: 1f55f977247830643b41609dfc8e8aaa, type: 3}
+  - {fileID: 21300000, guid: 32032ab70a778dc4493a766ba2faa060, type: 3}
+  - {fileID: 21300000, guid: c08bc1591399b964888c49f714f711a1, type: 3}
+  - {fileID: 21300000, guid: 24c7766acc9ef654390976f2f71098bc, type: 3}
+  - {fileID: 21300000, guid: a377709ad23b3a243a5630e148ff19b9, type: 3}
+  - {fileID: 21300000, guid: 70752c2c69eb7ec4f9efef78bf6e7f24, type: 3}
+  - {fileID: 21300000, guid: 175e67ac3dc60734aae282d4f404a04b, type: 3}
+  - {fileID: 21300000, guid: f87efcfcf34689a4190c255c19d15fc2, type: 3}
+  - {fileID: 21300000, guid: 2738177ebb4b0c44d8677d0c39a1e005, type: 3}
+  - {fileID: 21300000, guid: 1429cedeb0041e3418b56763a011dbb1, type: 3}
+  - {fileID: 21300000, guid: 87eb433f228a47b489b147714b217958, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - RestartBtn
+  - Effect0_2
+  - Effect0_6
+  - HP
+  - Effect0_3
+  - PlayerBullet0
+  - White
+  - Joystick
+  - Effect0_5
+  - Effect0_0
+  - EndBtn
+  - Item_MP
+  - EnemyBullet0
+  - MP
+  - Item_HP
+  - Item_Power
+  - Effect0_1
+  - Item_Gold
+  - Black
+  - Effect0_4
+  - BattleSceneBackground
+  m_RenderDataMap: {}
+  m_Tag: BattleSceneAtlas
+  m_IsVariant: 0
