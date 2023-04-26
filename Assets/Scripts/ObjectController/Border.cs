@@ -15,7 +15,10 @@ public class Border : MonoBehaviour
     /// <param name="collision"></param>
     void OnTriggerEnter2D(Collider2D collision)
     {
-        ObjectType newObjectType = collision.GetComponent<ObjectType>();
-        gameManager.SetObject(newObjectType);
+        if(!collision.GetComponent<ObjectType>().mainType.Equals(0))
+        {
+            ObjectType newObjectType = collision.GetComponent<ObjectType>();
+            gameManager.SetObject(newObjectType);
+        }
     }
 }

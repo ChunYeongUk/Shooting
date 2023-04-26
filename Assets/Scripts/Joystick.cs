@@ -11,6 +11,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     Player player;
 
     Vector2 firstPos;
+    Vector2 screenRatio;
 
     bool isDoubleTab;
 
@@ -24,6 +25,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         player = p_Player;
         pointerList = new List<PointerEventData>();
+        screenRatio = transform.parent.GetComponent<RectTransform>().rect.size / Screen.safeArea.size;
     }
 
     /// <summary>
@@ -34,8 +36,8 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         if (pointerList.Count.Equals(0))
         {
-            firstPos = eventData.position;
-
+            firstPos = eventData.position * screenRatio;
+            
             joystickTran.anchoredPosition = firstPos;
             joystickTran.gameObject.SetActive(true);
             player.TouchStart();
@@ -53,7 +55,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         {
             if (eventData.Equals(pointerList[0]))
             {
-                player.ChangeMoveDir(eventData.position - firstPos);
+                player.ChangeMoveDir(eventData.position * screenRatio - firstPos);
             }
         }
     }
